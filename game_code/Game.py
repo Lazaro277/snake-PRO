@@ -2,8 +2,9 @@ import sys
 
 import pygame
 
-from game_code.const import SCREEN_WIDTH, SCREEN_HEIGHT, OPTION_MENU
-from game_code.menu import Menu
+from game_code.Level import Level
+from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, OPTION_MENU
+from game_code.Menu import Menu
 
 
 class Game:
@@ -21,11 +22,13 @@ class Game:
 
             if return_menu == OPTION_MENU[0]:
                 # level 1
-                pass
+                level = Level(self.screen)
+                level.run(1)
 
             elif return_menu == OPTION_MENU[1]:
                 # level 2
-                pass
+                level = Level(self.screen)
+                level.run(2)
 
             elif return_menu == OPTION_MENU[2]:
                 # score

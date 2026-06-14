@@ -3,7 +3,7 @@ import sys
 import pygame
 from pygame import Font, Surface, Rect, K_ESCAPE
 
-from game_code.const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, ORANGE, OPTION_MENU, BLUE, GREEN, WHITE
+from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, ORANGE, OPTION_MENU, BLUE, GREEN, WHITE
 
 
 class Menu:
@@ -49,13 +49,11 @@ class Menu:
                         self.menu_text(50, OPTION_MENU[i], GREEN, (700, 470), 1)
             pygame.display.flip()
 
-            pygame.display.update()
-
             # Check events and close window\game
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    quit()
+                    sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         if option_menu < len(OPTION_MENU) - 1:
