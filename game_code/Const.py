@@ -9,9 +9,12 @@ WHITE = (255, 255, 255)
 OPTION_MENU = ('LEVEL 1',
                'LEVEL 2',
                'SCORE',
-               'SAIR')
+               'EXIT')
+
+OPTION_MENU_GAME_OVER_WIN = ('RESTART',
+                         'HOME')
 
 # S
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 736
 

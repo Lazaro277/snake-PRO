@@ -9,7 +9,8 @@ class DBProxy:
             CREATE TABLE IF NOT EXISTS dados(
                 id INTEGER PRIMARY KEY,
                 score INTEGER NOT NULL,
-                score_round INTEGER NOT NULL
+                score_round INTEGER NOT NULL,
+                goal INTEGER NOT NULL
             )
         ''')
         self.connection.commit()
@@ -20,12 +21,23 @@ class DBProxy:
 
         # 3. UPSERT syntax: Add to 'score' but overwrite/replace 'score_round'
         self.connection.execute('''
-            INSERT INTO dados (id, score, score_round)
-            VALUES (:id, :score, :score_round)
+            INSERT INTO dados (id, score, score_round, goal)
+            VALUES (:id, :score, :score_round, 0)
             ON CONFLICT(id) DO UPDATE SET 
                 score = dados.score + excluded.score,
                 score_round = excluded.score_round
         ''', score_dict)
+        self.connection.commit()
+
+    def save_goal(self, goal_dict: dict):
+        goal_dict['id'] = 1
+
+        self.connection.execute('''
+                    INSERT INTO dados (id, score, score_round, goal)
+                    VALUES (:id, 0, 0, :goal)
+                    ON CONFLICT(id) DO UPDATE SET 
+                        goal = excluded.goal
+                ''', goal_dict)
         self.connection.commit()
 
     def show(self) -> int:
@@ -40,6 +52,17 @@ class DBProxy:
     def show_round(self) -> int:
         # 4. Fetch only the score_round column from the database
         result = self.connection.execute('SELECT score_round FROM dados').fetchone()
+
+        # 5. If the database is not empty, return the integer inside the tuple
+        if result is not None:
+            return result[0]
+
+        # 6. If the database is empty, return 0
+        return 0
+
+    def show_goal(self) -> int:
+        # 4. Fetch only the score_round column from the database
+        result = self.connection.execute('SELECT goal FROM dados').fetchone()
 
         # 5. If the database is not empty, return the integer inside the tuple
         if result is not None:

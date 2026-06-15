@@ -3,7 +3,7 @@ import sys
 import pygame
 from pygame import Font, Surface, Rect, K_ESCAPE
 
-from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, WHITE, ORANGE
+from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, WHITE, ORANGE, GREEN, OPTION_MENU_GAME_OVER_WIN
 from game_code.Score import Score
 
 
@@ -12,15 +12,15 @@ class Game_Over:
         self.screen = screen
 
     def run(self):
-        option_menu = 0
         pygame.mixer_music.load('./assets/sound_menu.mp3')
         pygame.mixer_music.play(-1)
 
         score = Score.show_round()
         score = str(score)
 
-        while True:
+        option_menu = 0
 
+        while True:
             # load image
             bg_game_over = pygame.image.load("./assets/bg_menu.png").convert_alpha()
             bg_game_over = pygame.transform.scale(bg_game_over, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -30,9 +30,20 @@ class Game_Over:
             self.game_over_text(150, 'GAME', RED, ((SCREEN_WIDTH / 2), 70), 3)
             self.game_over_text(150, 'OVER', RED, ((SCREEN_WIDTH / 2), 190), 5)
 
-            self.game_over_text(50, 'SCORE', WHITE, ((SCREEN_WIDTH // 2), 350), 1)
-            self.game_over_text(70, score, ORANGE, ((SCREEN_WIDTH // 2), 430), 2)
-            Score.save(0, 0)
+            self.game_over_text(50, 'SCORE', WHITE, ((SCREEN_WIDTH // 2), 330), 1)
+            self.game_over_text(70, score, ORANGE, ((SCREEN_WIDTH // 2), 400), 2)
+
+            for i in range(len(OPTION_MENU_GAME_OVER_WIN)):
+                if i == 0:
+                    if i == option_menu:
+                        self.game_over_text(40, OPTION_MENU_GAME_OVER_WIN[i], WHITE, (330, 500), 1)
+                    else:
+                        self.game_over_text(40, OPTION_MENU_GAME_OVER_WIN[i], GREEN, (330, 500), 1)
+                if i == 1:
+                    if i == option_menu:
+                        self.game_over_text(40, OPTION_MENU_GAME_OVER_WIN[i], WHITE, (670, 500), 1)
+                    else:
+                        self.game_over_text(40, OPTION_MENU_GAME_OVER_WIN[i], GREEN, (670, 500), 1)
 
 
             pygame.display.flip()
@@ -46,6 +57,18 @@ class Game_Over:
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+                    if event.key == pygame.K_RIGHT:
+                        if option_menu < len(OPTION_MENU_GAME_OVER_WIN) - 1:
+                            option_menu += 1
+                        else:
+                            option_menu = 0
+                    if event.key == pygame.K_LEFT:
+                        if option_menu > 0:
+                            option_menu -= 1
+                        else:
+                            option_menu = len(OPTION_MENU_GAME_OVER_WIN) - 1
+                    if event.key == pygame.K_RETURN:
+                        return OPTION_MENU_GAME_OVER_WIN[option_menu]
 
 
     def game_over_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple, font_weight: int):
