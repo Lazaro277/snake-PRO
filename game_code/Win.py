@@ -3,10 +3,9 @@ import sys
 import pygame
 from pygame import Font, Surface, Rect, K_ESCAPE
 
-from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, WHITE, ORANGE, GREEN, OPTION_MENU_GAME_OVER_WIN
+from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, RED, WHITE, GREEN, OPTION_MENU_GAME_OVER_WIN
 from game_code.DBProxy import DBProxy
 from game_code.Score import Score
-
 
 class Win:
     def __init__(self, screen):

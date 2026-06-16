@@ -3,7 +3,6 @@ import sys
 
 import pygame
 from pygame import Surface, Rect, Font
-
 from game_code.Const import SCREEN_WIDTH, SCREEN_HEIGHT, OPTION_MENU_GAME_OVER_WIN, RED
 from game_code.DBProxy import DBProxy
 from game_code.Game_Over import Game_Over
@@ -48,6 +47,8 @@ class Level:
 
         background_score = pygame.image.load('./assets/background_score.jpg').convert_alpha()
         background_score = pygame.transform.scale(background_score, (160, 64))
+        bg_message_goal = pygame.image.load('./assets/bg_message_goal.png').convert_alpha()
+        bg_message_goal = pygame.transform.scale(bg_message_goal, (202, 36))
         apple = pygame.image.load('./assets/apple.png').convert_alpha()
         pygame.mixer_music.set_volume(0.1)
         pygame.mixer_music.play(-1)
@@ -99,6 +100,8 @@ class Level:
         pygame.time.set_timer(SNAKE_MOVE_EVENT, SPEED_SNAKE)
 
         Score.save(0, 0)
+
+        goal_time = 0
 
         while True:
             # Maintain the game running at 60 frames per second
@@ -160,9 +163,18 @@ class Level:
                             score = 10
                             score_round += score
                             Score.save(score, score_round)
+
+                            db_proxy = DBProxy('DBScore')
+                            goal = db_proxy.show_goal()
+                            goal = int(goal)
+                            db_proxy.close()
+                            if score_round >= goal and goal_time == 0:
+                                goal_time = pygame.time.get_ticks()
+
                             spawn_apple()  # Move apple to a new random location
                         else:
                             snake_body.pop()
+
 
             # 4. Rendering elements on the screen
             self.screen.blit(bg_menu, (0, 0))
@@ -193,6 +205,14 @@ class Level:
                 self.screen.blit(block5, block5_rect)
                 self.screen.blit(block6, block6_rect)
                 self.screen.blit(block1, block7_rect)
+
+            if goal_time > 0:
+                current_time = pygame.time.get_ticks()
+
+                # If less than 5000 milliseconds (5 seconds) have passed, draw the text
+                if current_time - goal_time < 3000:
+                    self.screen.blit(bg_message_goal, (410, 13))
+                    self.level_text(20, 'Goal achieved', RED, ((SCREEN_WIDTH / 2), 30), 2)
 
             pygame.display.flip()
 
@@ -240,7 +260,6 @@ class Level:
             self.call_win(level_current)
         else:
             self.call_game_over(level_current)
-
 
     def level_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple, font_weight: int):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
