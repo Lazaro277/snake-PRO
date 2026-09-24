@@ -149,7 +149,7 @@ You also need Pygame.
 Install it with:
 
 ```bash
-pip install pygame
+pip install -r requirements.txt
 ```
 
 ### 1. Clone the repository
