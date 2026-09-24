@@ -25,6 +25,8 @@ class Menu:
 
             self.menu_text(150, 'Snake', ORANGE, ((SCREEN_WIDTH / 2), 70), 3)
             self.menu_text(150, 'PRO', RED, ((SCREEN_WIDTH / 2), 190), 5)
+            self.menu_text(20, 'Use the arrow keys to control the snake and menu.', WHITE, ((SCREEN_WIDTH // 2), 570), 1)
+
 
             for i in range(len(OPTION_MENU)):
                 if i == 0:
