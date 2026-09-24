@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Build files
+build/
+dist/
+
+# PyInstaller
+*.spec
+
+# IDE
+.idea/
